@@ -234,6 +234,8 @@ def populate(filename, config, delimiter, overwrite=False):
         contents = file_get_contents(source_file)
     else:
         contents = file_get_contents(filename)
+    print(filename)
+    print(fragments)
     for fragment in fragments:
         identifier = os.path.splitext(os.path.basename(fragment))[0]
         if filename.endswith(".md"):

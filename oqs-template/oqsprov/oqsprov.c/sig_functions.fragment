@@ -1,9 +1,12 @@
 {% for sig in config['sigs'] %}
    {%- for variant in sig['variants'] %}
 #ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
-    SIGALG("{{variant['name']}}", {{variant['security']}}, oqs_signature_functions),
+    SIGALG("{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", {{variant['security']}}, oqs_signature_functions),
       {%- for classical_alg in variant['mix_with'] %}
-    SIGALG("{{ classical_alg['name'] }}_{{variant['name']}}", {{variant['security']}}, oqs_signature_functions),
+    SIGALG("{{ classical_alg['name'] }}_{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", {{variant['security']}}, oqs_signature_functions),
+      {%- endfor %}
+      {%- for composite_alg in variant['composite'] %}
+    SIGALG("{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}_{{ composite_alg['name'] }}", {{composite_alg['security']}}, oqs_signature_functions),
       {%- endfor %}
 #endif
    {%- endfor %}
