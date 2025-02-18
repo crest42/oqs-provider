@@ -4,14 +4,14 @@
     {%- if 'enable_tls' in variant and variant['enable_tls'] -%}
     {%- set cnt.val = cnt.val + 1 %}
 #ifdef OQS_ENABLE_SIG_{{ variant['oqs_meth']|replace("OQS_SIG_alg_","") }}
-    OQS_SIGALG_ENTRY("{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", "{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", "{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", "{{ variant['oid'] }}", {{ cnt.val }}),
+    OQS_SIGALG_ENTRY("{{ variant['std_tls_name'] }}", "{{ variant['std_tls_name'] }}", "{{ variant['std_tls_name'] }}", "{{ variant['oid'] }}", {{ cnt.val }}),
         {%- for classical_alg in variant['mix_with'] %}
     {%- set cnt.val = cnt.val + 1 %}
-    OQS_SIGALG_ENTRY("{{ classical_alg['name'] }}_{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", "{{ classical_alg['name'] }}_{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", "{{ classical_alg['name'] }}_{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}", "{{ classical_alg['oid'] }}", {{ cnt.val }}),
+    OQS_SIGALG_ENTRY("{{ classical_alg['name'] }}_{{ variant['std_tls_name'] }}", "{{ classical_alg['name'] }}_{{ variant['std_tls_name'] }}", "{{ classical_alg['name'] }}_{{ variant['std_tls_name'] }}", "{{ classical_alg['oid'] }}", {{ cnt.val }}),
         {%- endfor %}
         {%- for classical_alg in variant['composite'] %}
     {%- set cnt.val = cnt.val + 1 %}
-    OQS_SIGALG_ENTRY("{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}_{{ classical_alg['name'] }}", "{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}_{{ classical_alg['name'] }}", "{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}_{{ classical_alg['name'] }}", "{{ classical_alg['oid'] }}", {{ cnt.val }}),
+    OQS_SIGALG_ENTRY("{{ variant['std_tls_name'] }}_{{ classical_alg['name'] }}", "{{ variant['std_tls_name'] }}_{{ classical_alg['name'] }}", "{{ variant['std_tls_name'] }}_{{ classical_alg['name'] }}", "{{ classical_alg['oid'] }}", {{ cnt.val }}),
         {%- endfor %}
 #endif
     {%- endif -%}

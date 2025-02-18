@@ -234,8 +234,6 @@ def populate(filename, config, delimiter, overwrite=False):
         contents = file_get_contents(source_file)
     else:
         contents = file_get_contents(filename)
-    print(filename)
-    print(fragments)
     for fragment in fragments:
         identifier = os.path.splitext(os.path.basename(fragment))[0]
         if filename.endswith(".md"):
@@ -332,6 +330,20 @@ def load_config(include_disabled_sigs=False, include_disabled_kems=False):
                     )
                     exit(1)
                 hybrid_nids.add(extra_hybrid_nid)
+ 
+    for sig in _config["sigs"]:
+        if "variants" in sig:
+            for variant in sig["variants"]:
+                if "std_tls_name" not in variant:
+                    print(variant)
+                    variant["std_tls_name"] = variant["name"]
+                    variant["std_alg_name"] = variant["name"]
+
+    for kem in _config["kems"]:
+        if "std_tls_name" not in kem:
+            kem["std_tls_name"] = kem["name_group"]
+            kem["std_alg_name"] = kem["name_group"]
+
     return _config
 
 

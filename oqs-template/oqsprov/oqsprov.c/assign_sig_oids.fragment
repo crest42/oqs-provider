@@ -44,12 +44,12 @@ NULL, "{% if 'standard_name' in hybrid %}{{hybrid['standard_name']}}{% else %}{{
 
 {% for sig in config['sigs'] %}
     {%- for variant in sig['variants'] %}
-"{{ variant['oid'] }}", "{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}",
+"{{ variant['oid'] }}", "{{ variant['std_tls_name'] }}",
         {%- for classical_alg in variant['mix_with'] %}
-"{{ classical_alg['oid'] }}" , "{{ classical_alg['name'] }}_{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}",
+"{{ classical_alg['oid'] }}" , "{{ classical_alg['name'] }}_{{ variant['std_tls_name'] }}",
         {%- endfor %}
         {%- for composite_alg in variant['composite'] %}
-"{{ composite_alg['oid'] }}" , "{% if 'nist_name' in variant %}{{variant['nist_name']}}{% else %}{{ variant['name'] }}{% endif %}_{{ composite_alg['name'] }}",
+"{{ composite_alg['oid'] }}" , "{{ variant['std_tls_name'] }}_{{ composite_alg['name'] }}",
         {%- endfor %}
     {%- endfor %}
 {%- endfor %}
